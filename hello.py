@@ -30,3 +30,7 @@ print "hellpopo1231231".isdigit()
 word = "super1"
 if re.search("\d", word):
     print("y")
+
+
+
+print "hello_".isalpha()

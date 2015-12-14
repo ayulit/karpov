@@ -7,32 +7,18 @@ from sklearn.datasets import fetch_20newsgroups
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-import re
+num_topics = 20 # number of topics
 
-import numpy as np
-import sys
+vect = TfidfVectorizer()
+tok = vect.build_tokenizer()  # tokenizer
+lem = WordNetLemmatizer()  # lemmatizer
 
-num_topics = 20
+dataset=fetch_20newsgroups()  # dataset
 
-vect = TfidfVectorizer()   # конвертор в матрицу TF-IDF
-tok = vect.build_tokenizer()  # токенизатор
-lem = WordNetLemmatizer() # лемматизатор
-
-dataset=fetch_20newsgroups()  # датасет - 20 групп новостей
-
-# berem toko 3 categorii
-# dataset=fetch_20newsgroups(categories=['alt.atheism', 'talk.religion.misc', 'sci.space'])
-
-
-
-#########################################################################################
-
-# remove common words, tokenize and lemmatize
+# remove common words, numbers, tokenize and lemmatize
 texts = [[lem.lemmatize(word) for word in tok(text.lower())\
           if ((word not in stopwords.words('english'))\
-              and (word.isdigit() == False)\
-              and not re.search("\d", word)\
-              and not re.search("_", word))]
+              and word.isalpha())]
          for text in dataset.data]
 
 print "texts - ok"
@@ -46,11 +32,11 @@ for text in texts:
 texts = [[token for token in text if frequency[token] > 1]
          for text in texts]
 
-dictionary = corpora.Dictionary(texts) # создаем словарь (сет токенов)
-dictionary.save("dict.dat")
+dictionary = corpora.Dictionary(texts) # dictionary
+dictionary.save("dict.dat")  # saving dictionary
 
-corpus = [dictionary.doc2bow(text) for text in texts] # корпус
+corpus = [dictionary.doc2bow(text) for text in texts]  # corpus
 
-# Обучение LDA модели
+# LDA model
 lda = models.ldamodel.LdaModel(corpus=corpus, id2word=dictionary, num_topics=num_topics, update_every=1, chunksize=10000, passes=1)
-lda.save('lda.dat')
+lda.save('lda.dat')  # saving model
