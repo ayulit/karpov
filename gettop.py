@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from gensim import corpora, models
 from scipy import spatial
 

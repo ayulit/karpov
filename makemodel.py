@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from gensim import corpora, models
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.datasets import fetch_20newsgroups
